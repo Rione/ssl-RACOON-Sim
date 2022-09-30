@@ -277,7 +277,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     this->showMaximized();
-    this->setWindowTitle("grSim");
+    this->setWindowTitle("RACOON-Sim (Powered by grSim)");
 
     robotwidget->teamCombo->setCurrentIndex(0);
     robotwidget->robotCombo->setCurrentIndex(0);

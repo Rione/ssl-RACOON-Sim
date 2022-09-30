@@ -32,7 +32,7 @@ RoboCupSSLServer::RoboCupSSLServer(QObject *parent, const quint16 &port, const s
     _net_address(new QHostAddress(QString(net_address.c_str()))),
     _net_interface(new QNetworkInterface(QNetworkInterface::interfaceFromName(QString(net_interface.c_str()))))
 {
-    _socket->setSocketOption(QAbstractSocket::MulticastTtlOption, 1);
+    _socket->setSocketOption(QAbstractSocket::MulticastTtlOption, 2);
 }
 
 RoboCupSSLServer::~RoboCupSSLServer()
