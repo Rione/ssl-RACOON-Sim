@@ -32,7 +32,13 @@ RoboCupSSLServer::RoboCupSSLServer(QObject *parent, const quint16 &port, const s
     _net_address(new QHostAddress(QString(net_address.c_str()))),
     _net_interface(new QNetworkInterface(QNetworkInterface::interfaceFromName(QString(net_interface.c_str()))))
 {
-    _socket->setSocketOption(QAbstractSocket::MulticastTtlOption, 2);
+    //bind
+    _socket->bind(QHostAddress::AnyIPv4, _port, QUdpSocket::ShareAddress);
+    //check connected
+    if (!_socket->isValid()) {
+        logStatus(QString("RoboCupSSLServer: Error binding to port %1").arg(_port), QColor("red"));
+    }
+    _socket->setSocketOption(QAbstractSocket::MulticastTtlOption, 1);
 }
 
 RoboCupSSLServer::~RoboCupSSLServer()
@@ -59,6 +65,11 @@ void RoboCupSSLServer::change_interface(const string & net_interface)
 {
     delete _net_interface;
     _net_interface = new QNetworkInterface(QNetworkInterface::interfaceFromName(QString(net_interface.c_str())));
+}
+
+void RoboCupSSLServer::change_ttl(const int &net_ttl)
+{
+    _socket->setSocketOption(QAbstractSocket::MulticastTtlOption, net_ttl);
 }
 
 bool RoboCupSSLServer::send(const SSL_WrapperPacket & packet)

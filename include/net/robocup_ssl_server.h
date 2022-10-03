@@ -50,6 +50,7 @@ public:
     void change_port(const quint16 &port);
     void change_address(const string & net_address);
     void change_interface(const string & net_interface);
+    void change_ttl(const int &net_ttl);
 
 protected:
     QUdpSocket * _socket;

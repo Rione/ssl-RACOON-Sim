@@ -190,6 +190,7 @@ public:
   DEF_VALUE(double,Double,DesiredFPS)
   DEF_VALUE(double,Double,DeltaTime)
   DEF_VALUE(int,Int,sendGeometryEvery)
+  DEF_VALUE(int,Int,VisionMulticastTTL)
   DEF_VALUE(double,Double,Gravity)
   DEF_VALUE(bool,Bool,ResetTurnOver)
   DEF_VALUE(std::string,String,VisionMulticastAddr)  

@@ -141,6 +141,7 @@ ConfigWidget::ConfigWidget() {
     ADD_VALUE(comm_vars,Int,YellowControlListenPort,10302,"Yellow team control port")
     ADD_VALUE(comm_vars,Int,sendDelay,0,"Sending delay (milliseconds)")
     ADD_VALUE(comm_vars,Int,sendGeometryEvery,120,"Send geometry every X frames")
+    ADD_VALUE(comm_vars,Int,VisionMulticastTTL,1,"Vision multicast TTL")
     VarListPtr gauss_vars(new VarList("Gaussian noise"));
         comm_vars->addChild(gauss_vars);
         ADD_VALUE(gauss_vars,Bool,noise,false,"Noise")

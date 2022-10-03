@@ -273,6 +273,8 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(configwidget->v_SimControlListenPort.get(), SIGNAL(wasEdited(VarPtr)), this, SLOT(reconnectSimControlSocket()));
     QObject::connect(configwidget->v_BlueControlListenPort.get(), SIGNAL(wasEdited(VarPtr)), this, SLOT(reconnectBlueControlSocket()));
     QObject::connect(configwidget->v_YellowControlListenPort.get(), SIGNAL(wasEdited(VarPtr)), this, SLOT(reconnectYellowControlSocket()));
+    //ttl
+    QObject::connect(configwidget->v_VisionMulticastTTL.get(), SIGNAL(wasEdited(VarPtr)), this, SLOT(reconnectVisionSocket()));
     timer->start();
 
 
@@ -591,6 +593,7 @@ void MainWindow::reconnectVisionSocket()
     }
     visionServer->change_address(configwidget->VisionMulticastAddr());
     visionServer->change_port(configwidget->VisionMulticastPort());
+    visionServer->change_ttl(configwidget->VisionMulticastTTL());
     logStatus(QString("Vision server connected on: %1").arg(configwidget->VisionMulticastPort()),QColor("green"));
 }
 
