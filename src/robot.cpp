@@ -452,16 +452,18 @@ void Robot::setSpeed(int i,dReal s)
 
 void Robot::setSpeed(dReal vx, dReal vy, dReal vw)
 {
+    vx = -vx;
+    vy = -vy;
     dReal _DEG2RAD = M_PI / 180.0;
+    // rad to deg
+    vw = vw / _DEG2RAD;
+    setDir(vw);
 
     dReal v = sqrt(vx * vx + vy * vy);
     if (v > VelAbsoluteMax) {
         vx *= VelAbsoluteMax / v;
         vy *= VelAbsoluteMax / v;
         v = VelAbsoluteMax;
-    }
-    if (abs(vw) > VelAngularMax) {
-        vw = copysign(VelAngularMax, vw);
     }
     
     const dReal* cvv = dBodyGetLinearVel(chassis->body);
@@ -487,22 +489,15 @@ void Robot::setSpeed(dReal vx, dReal vy, dReal vw)
         }
     }
 
-    const dReal* cvvw = dBodyGetAngularVel(chassis->body);
-    dReal cvw = cvvw[2];
-    dReal aw = (vw - cvw) / cfg->DeltaTime() / 2;
-    dReal awLimit = aw > 0 ? AccSpeedupAngularMax : AccBrakeAngularMax;
-    if (abs(aw) > awLimit) {
-        aw = copysign(awLimit, aw);
-        vw = cvw + aw * cfg->DeltaTime() * 2;
-    }
+    vw = 0;
     
     // Calculate Motor Speeds
     dReal motorAlpha[4] = {cfg->robotSettings.Wheel1Angle * _DEG2RAD, cfg->robotSettings.Wheel2Angle * _DEG2RAD, cfg->robotSettings.Wheel3Angle * _DEG2RAD, cfg->robotSettings.Wheel4Angle * _DEG2RAD};
 
-    dReal dw1 =  (1.0 / cfg->robotSettings.WheelRadius) * (( (cfg->robotSettings.RobotRadius * vw) - (vx * sin(motorAlpha[0])) + (vy * cos(motorAlpha[0]))) );
-    dReal dw2 =  (1.0 / cfg->robotSettings.WheelRadius) * (( (cfg->robotSettings.RobotRadius * vw) - (vx * sin(motorAlpha[1])) + (vy * cos(motorAlpha[1]))) );
-    dReal dw3 =  (1.0 / cfg->robotSettings.WheelRadius) * (( (cfg->robotSettings.RobotRadius * vw) - (vx * sin(motorAlpha[2])) + (vy * cos(motorAlpha[2]))) );
-    dReal dw4 =  (1.0 / cfg->robotSettings.WheelRadius) * (( (cfg->robotSettings.RobotRadius * vw) - (vx * sin(motorAlpha[3])) + (vy * cos(motorAlpha[3]))) );
+    dReal dw1 =  (1.0 / cfg->robotSettings.WheelRadius) * (( (vx * sin(motorAlpha[0])) + (vy * cos(motorAlpha[0]))) );
+    dReal dw2 =  (1.0 / cfg->robotSettings.WheelRadius) * (( (vx * sin(motorAlpha[1])) + (vy * cos(motorAlpha[1]))) );
+    dReal dw3 =  (1.0 / cfg->robotSettings.WheelRadius) * (( (vx * sin(motorAlpha[2])) + (vy * cos(motorAlpha[2]))) );
+    dReal dw4 =  (1.0 / cfg->robotSettings.WheelRadius) * (( (vx * sin(motorAlpha[3])) + (vy * cos(motorAlpha[3]))) );
 
     setSpeed(0 , dw1);
     setSpeed(1 , dw2);
